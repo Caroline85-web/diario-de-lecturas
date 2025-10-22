@@ -10,7 +10,7 @@
 ![Preview](https://raw.githubusercontent.com/Caroline85-web/diario-de-lecturas/main/diagrama-diario-de-lecturas.svg)
 
 Aplicación web desarrollada en **HTML**, **Tailwind CSS** y **JavaScript**, que permite registrar, editar y filtrar lecturas personales.  
-El proyecto ha sido creado como ejercicio práctico dentro del módulo de **Técnicas Avanzadas de Diseño Web**.
+Proyecto desarrollado dentro del módulo **Técnicas Avanzadas de Diseño Web**, integrando accesibilidad, semántica y diseño responsivo.
 
 ---
 
