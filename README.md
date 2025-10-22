@@ -35,9 +35,11 @@ El proyecto ha sido creado como ejercicio práctico dentro del módulo de **Téc
 
 ## 🧩 Estructura del proyecto  
 
+```bash
 📁 diario-de-lecturas
 │
-├── index2.html                  
+├── index2.html                  # Interfaz principal
+│
 ├── diagramas/
 │   ├── diagrama-home.svg
 │   └── diagrama-formulario.svg
