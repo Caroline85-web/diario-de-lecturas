@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diario de Lecturas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+  
+  let filtroActual = 'todos';
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          fondo: '#f9f8f4',
+          texto: '#1f2937',
+          primario: '#9f9187',
+          'marron-principal': '#9f9187',
+          'marron-hover': '#7f736b',
+          'gris-medio': '#6b7280',
+          'gris-oscuro': '#374151',
+        },
+        fontFamily: {
+          sans: ['"Nunito"', 'sans-serif']
+        }
+      }
+    }
+  };
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  .activo {
+    background-color: #9f9187 !important; /* bg-marron-principal */
+    color: white !important;
+    border-color: #9f9187 !important;
+  }
+  /* Estilos bonitos para los selects */
+  select {
+    appearance: none; /* Elimina la flecha del navegador */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    background-image: url("data:image/svg+xml,%3Csvg fill='none' stroke='%239f9187' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1rem;
+
+    padding-right: 2.5rem; /* Espacio para el icono */
+    cursor: pointer;
+  }
+
+  @keyframes toastFade {
+    0% {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    15% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    85% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-12px);
+    }
+  }
+
+  .animate-fade {
+    animation: toastFade 2.2s ease-in-out forwards;
+  }
+</style>
+</head>
+<body class="bg-fondo min-h-screen p-4 font-sans text-texto">
+
+  <!-- Pantalla Home -->
+  <div id="pantalla-home" class="block">
+    <div class="flex items-center justify-between mb-4">
+      <h1 class="text-2xl font-bold text-primario flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primario" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20l9 2V4l-9 2-9-2v18l9-2z" /></svg>
+        Diario de Lecturas
+      </h1>
+    </div>
+    <div class="mb-4">
+      <input type="text" id="busqueda" placeholder="Buscar libro..." class="w-full p-3 border border-primario rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primario">
+    </div>
+    <div class="flex justify-between mb-4 gap-2 text-sm">
+      <button onclick="filtrar('todos')" id="filtro-todos" class="px-3 py-2 rounded-full shadow text-marron-principal border border-marron-principal bg-white transition">Todos</button>
+      <button onclick="filtrar('pendiente')" id="filtro-pendiente" class="px-3 py-2 rounded-full shadow text-marron-principal border border-marron-principal bg-white transition">Pendientes</button>
+      <button onclick="filtrar('leyendo')" id="filtro-leyendo" class="px-3 py-2 rounded-full shadow text-marron-principal border border-marron-principal bg-white transition">Leyendo</button>
+      <button onclick="filtrar('leido')" id="filtro-leido" class="px-3 py-2 rounded-full shadow text-marron-principal border border-marron-principal bg-white transition">Leídos</button>
+    </div>
+    <div id="lista-libros" class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-5 px-2 mt-6"></div>
+    <div class="fixed bottom-6 right-6">
+      <button onclick="mostrarFormulario()" class="font-semibold text-white bg-marron-principal px-5 py-3 rounded-full shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-marron-hover transition flex items-center gap-2">
+        <span class="text-xl leading-none">+</span> <span>Añadir libro</span>
+      </button>
+    </div>
+    <style>
+      #lista-libros img {
+      flex-shrink: 0; /* Evitar que la imagen se reduzca */
+      width: 64px; /* Ancho fijo */
+      height: 96px; /* Altura fija */
+      object-fit: cover; /* Asegurar que la imagen se ajuste dentro de las dimensiones */
+      }
+    </style>
+  </div>
+
+  <!-- Pantalla Registro -->
+  <div id="pantalla-formulario" class="hidden">
+    <button onclick="mostrarHome()" class="mb-4 text-primario">&larr; Volver</button>
+    <div class="flex flex-col gap-4">
+      <div class="flex items-start gap-4">
+        <!-- Imagen -->
+        <div class="w-24 relative rounded overflow-hidden bg-gray-200 group" style="height: 168px;">
+          <input type="file" id="imagen" accept="image/*"
+            class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+            onchange="actualizarVistaPrevia(event)">
+          <img id="vistaPrevia" src="" alt="Vista previa"
+            class="w-full h-full object-cover rounded absolute top-0 left-0 hidden z-0">
+          <span id="textoSubir"
+            class="absolute inset-0 flex items-center justify-center text-sm text-gray-500 group-hover:hidden z-0">
+            Subir imagen
+          </span>
+          <span id="textoCambiar"
+            class="absolute inset-0 flex flex-col items-center justify-center text-xs text-white bg-black bg-opacity-40 hidden group-hover:flex z-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Cambiar
+          </span>
+        </div>
+  
+        <!-- Título y autor -->
+        <div class="flex-1 flex flex-col gap-4">
+          <div>
+            <label for="titulo" class="block text-gray-700">Título</label>
+            <input type="text" id="titulo" placeholder="Título" class="w-full p-3 border border-primario rounded-xl focus:outline-none focus:ring-2 focus:ring-primario">
+          </div>
+          <div>
+            <label for="autor" class="block text-gray-700">Autor</label>
+            <input type="text" id="autor" placeholder="Autor" class="w-full p-3 border border-primario rounded-xl focus:outline-none focus:ring-2 focus:ring-primario">
+          </div>
+        </div>
+      </div>
+  
+      <!-- Estado y género -->
+      <div class="flex gap-4">
+        <div class="flex-1">
+          <label for="estado" class="block text-gray-700">Estado</label>
+          <select id="estado" class="w-full p-3 pr-6 border border-primario rounded-xl focus:outline-none focus:ring-2 focus:ring-primario">
+            <option value="pendiente">Pendiente</option>
+            <option value="leyendo">Leyendo</option>
+            <option value="leido">Leído</option>
+          </select>
+        </div>
+        <div class="flex-1">
+          <label for="genero" class="block text-gray-700">Género</label>
+          <select id="genero" class="w-full p-3 border border-primario rounded-xl focus:outline-none focus:ring-2 focus:ring-primario">
+            <option value="Ficción">Ficción</option>
+            <option value="No Ficción">No Ficción</option>
+            <option value="Fantasía">Fantasía</option>
+            <option value="Thriller">Thriller</option>
+            <option value="Romance">Romance</option>
+            <option value="De terror">De Terror</option>
+            <option value="Ciencia Ficción">Ciencia Ficción</option>
+            <option value="Biografía">Biografía</option>
+            <option value="Estilo de Vida">Estilo de Vida</option>
+          </select>
+        </div>
+      </div>
+  
+      <!-- Notas y clasificación -->
+      <textarea id="notas" placeholder="Notas..." class="w-full p-3 border border-primario rounded-xl focus:outline-none focus:ring-2 focus:ring-primario"></textarea>
+      <input type="text" id="clasificacion" placeholder="Clasificación personal (ej. 5 estrellas)" class="w-full p-3 border border-primario rounded-xl focus:outline-none focus:ring-2 focus:ring-primario">
+      <!-- Registro frase -->
+      <div class="mb-4">
+        <label for="frase" class="block text-gray-700">Frase que me ha marcado</label>
+        <textarea id="frase" name="frase" rows="3" placeholder="Una frase que quieras recordar..." class="w-full p-3 border border-primario rounded-xl focus:outline-none focus:ring-2 focus:ring-primario italic text-sm"></textarea>
+      </div>
+      <!-- Botón -->
+      <button id="boton-guardar" onclick="guardarLibro()" class="w-full font-semibold text-white bg-marron-principal py-3 rounded-xl shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-marron-hover transition">
+        Guardar
+      </button>
+    </div>
+  </div>
+  <script>
+    let libros = JSON.parse(localStorage.getItem('libros')) || [];
+    let libroEditando = null;
+    let toastTimeout = null;
+
+    function renderLibros(filtro = 'todos') {
+      const contenedor = document.getElementById('lista-libros');
+      contenedor.innerHTML = '';
+      libros.filter(libro => filtro === 'todos' || libro.estado === filtro)
+        .forEach((libro, index) => {
+          const card = document.createElement('div');
+          card.className = 'bg-white p-4 rounded-xl shadow flex gap-4 transition-transform duration-300 hover:scale-[1.01]';
+
+          const img = libro.imagen 
+            ? `<img src="${libro.imagen}" alt="Portada" class="w-16 h-24 object-cover rounded">` 
+            : `<div class="w-16 h-24 bg-gray-200 rounded flex items-center justify-center text-gray-500">Sin imagen</div>`;
+
+            card.innerHTML = `
+  ${img}
+  <div class="flex-1">
+    <h3 class="font-bold text-lg text-texto">${libro.titulo}</h3>
+    <p class="text-sm text-texto">${libro.autor} - ${libro.genero}</p>
+    <p class="text-xs text-gray-600 mt-1">Estado: ${libro.estado} | Clasificación: ${libro.clasificacion || 'No asignada'}</p>
+    <p class="text-sm mt-2 min-h-[48px]">${libro.notas || '&nbsp;'}</p>
+    ${libro.frase ? `<p class="mt-2 text-sm italic text-primario">"${libro.frase}"</p>` : ""}
+    <div class="mt-3 flex gap-2">
+      <button onclick="editarLibro(${index})" class="font-semibold bg-marron-principal text-white px-3 py-1 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-marron-hover transition">
+        Editar
+      </button>
+      <button onclick="eliminarLibro(${index})" class="bg-gray-500 text-white px-3 py-1 rounded-full text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 transition">
+        Eliminar
+      </button>
+    </div>
+  </div>
+`;
+          contenedor.appendChild(card);
+        });
+    }
+
+    function mostrarFormulario() {
+      document.getElementById('pantalla-home').classList.add('hidden');
+      document.getElementById('pantalla-formulario').classList.remove('hidden');
+      if (libroEditando === null) {
+        limpiarFormulario();
+        document.getElementById('boton-guardar').textContent = 'Guardar';
+      }
+    }
+
+    function mostrarHome() {
+      document.getElementById('pantalla-home').classList.remove('hidden');
+      document.getElementById('pantalla-formulario').classList.add('hidden');
+      renderLibros();
+    }
+
+    function guardarLibro() {
+  const archivoImagen = document.getElementById('imagen').files[0];
+
+  if (archivoImagen) {
+    const lector = new FileReader();
+    lector.onload = function (evento) {
+      guardarLibroConImagen(evento.target.result);
+    };
+    lector.readAsDataURL(archivoImagen);
+  } else {
+    const imagenAnterior = libroEditando !== null ? libros[libroEditando].imagen : '';
+    guardarLibroConImagen(imagenAnterior);
+  }
+}
+
+function guardarLibroConImagen(imagen) {
+  const libro = {
+    titulo: document.getElementById('titulo').value,
+    autor: document.getElementById('autor').value,
+    imagen: imagen,
+    estado: document.getElementById('estado').value,
+    genero: document.getElementById('genero').value,
+    notas: document.getElementById('notas').value,
+    clasificacion: document.getElementById('clasificacion').value,
+    frase: document.getElementById('frase').value,
+  };
+
+  if (libroEditando !== null) {
+    libros[libroEditando] = libro;
+    libroEditando = null;
+  } else {
+    libros.push(libro);
+  }
+
+  localStorage.setItem('libros', JSON.stringify(libros));
+  libros = JSON.parse(localStorage.getItem('libros')) || [];
+
+  mostrarToastGuardado();
+  mostrarHome();
+  renderLibros(filtroActual);
+}
+  
+function mostrarToastGuardado() {
+  const toast = document.getElementById('toast-guardado');
+  if (!toast) {
+    return;
+  }
+
+  clearTimeout(toastTimeout);
+  toast.classList.remove('hidden');
+
+  const contenido = toast.querySelector('[data-toast]');
+  if (contenido) {
+    contenido.classList.remove('animate-fade');
+    void contenido.offsetWidth; // Reinicia la animación
+    contenido.classList.add('animate-fade');
+  }
+
+  toastTimeout = setTimeout(() => {
+    toast.classList.add('hidden');
+  }, 2200);
+}
+  
+    
+
+    function editarLibro(index) {
+      console.log('Índice recibido para editar:', index); // Depuración
+      if (typeof index === 'undefined' || index < 0 || index >= libros.length) {
+        console.error('Índice inválido para editar libro:', index);
+        return;
+      }
+      const libro = libros[index];
+      libroEditando = index;
+      const textoCambiar = document.getElementById('textoCambiar');
+      textoCambiar.classList.remove('hidden');
+
+      // Cargar datos en el formulario
+      document.getElementById('titulo').value = libro.titulo;
+      document.getElementById('autor').value = libro.autor;
+      document.getElementById('estado').value = libro.estado;
+      document.getElementById('genero').value = libro.genero;
+      document.getElementById('notas').value = libro.notas;
+      document.getElementById('clasificacion').value = libro.clasificacion;
+
+      // Mostrar vista previa de la imagen
+      const vistaPrevia = document.getElementById('vistaPrevia');
+      const textoSubir = document.getElementById('textoSubir');
+      if (libro.imagen) {
+        vistaPrevia.src = libro.imagen;
+        vistaPrevia.classList.remove('hidden');
+        textoSubir.classList.add('hidden');
+      } else {
+        vistaPrevia.src = '';
+        vistaPrevia.classList.add('hidden');
+        textoSubir.classList.remove('hidden');
+      }
+
+      document.getElementById('boton-guardar').textContent = 'Guardar cambios';
+      mostrarFormulario();
+    }
+
+    function eliminarLibro(index) {
+      libros.splice(index, 1);
+      localStorage.setItem('libros', JSON.stringify(libros));
+      renderLibros();
+    }
+
+    function filtrar(estado) {
+      filtroActual = estado;
+      renderLibros(estado);
+
+      document.querySelectorAll('#filtro-todos, #filtro-pendiente, #filtro-leyendo, #filtro-leido')
+    .forEach(btn => btn.classList.remove('activo'));
+
+    const id = `filtro-${estado}`;
+  const btnActivo = document.getElementById(id);
+  if (btnActivo) btnActivo.classList.add('activo');
+}
+
+  // Elimina clase activa de todos
+  document.querySelectorAll('.tab-filtro, #filtro-todos, #filtro-pendiente, #filtro-leyendo, #filtro-leido')
+    .forEach(btn => btn.classList.remove('activo'));
+
+  // Activa el botón correspondiente
+  const id = `filtro-${estado}`;
+  const btnActivo = document.getElementById(id);
+  if (btnActivo) btnActivo.classList.add('activo')
+
+    function limpiarFormulario() {
+      document.getElementById('titulo').value = '';
+      document.getElementById('autor').value = '';
+      document.getElementById('imagen').value = '';
+      document.getElementById('estado').value = 'pendiente';
+      document.getElementById('genero').value = 'Ficción';
+      document.getElementById('notas').value = '';
+      document.getElementById('clasificacion').value = '';
+      document.getElementById('vistaPrevia').src = '';
+      document.getElementById('vistaPrevia').classList.add('hidden');
+      document.getElementById('textoSubir').classList.remove('hidden');
+      document.getElementById('frase').value = '';
+    }
+
+    document.getElementById('busqueda').addEventListener('input', function () {
+  const texto = this.value.toLowerCase();
+  const resultados = libros.filter(libro =>
+    libro.titulo.toLowerCase().includes(texto) &&
+    (filtroActual === 'todos' || libro.estado === filtroActual)
+  );
+
+  const contenedor = document.getElementById('lista-libros');
+  contenedor.innerHTML = '';
+  resultados.forEach((libro, index) => {
+    const card = document.createElement('div');
+    card.className = 'bg-white p-4 rounded-xl shadow flex gap-4 transition-transform duration-300 hover:scale-[1.01]';
+
+    const img = libro.imagen
+      ? `<img src="${libro.imagen}" alt="Portada" class="w-16 h-24 object-cover rounded">`
+      : `<div class="w-16 h-24 bg-gray-200 rounded flex items-center justify-center text-gray-500">Sin imagen</div>`;
+
+      card.innerHTML = `
+  ${img}
+  <div class="flex-1">
+    <h3 class="font-bold text-lg text-texto">${libro.titulo}</h3>
+    <p class="text-sm text-texto">${libro.autor} - ${libro.genero}</p>
+    <p class="text-xs text-gray-600 mt-1">Estado: ${libro.estado} | Clasificación: ${libro.clasificacion || 'No asignada'}</p>
+    <p class="text-sm mt-2 min-h-[48px]">${libro.notas || '&nbsp;'}</p>
+    <div class="mt-3 flex gap-2">
+      <button onclick="editarLibro(${index})" class="font-semibold bg-marron-principal text-white px-3 py-1 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-marron-hover transition">
+        Editar
+      </button>
+      <button onclick="eliminarLibro(${index})" class="bg-gray-500 text-white px-3 py-1 rounded-full text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 transition">
+        Eliminar
+      </button>
+    </div>
+  </div>
+`;
+    contenedor.appendChild(card);
+  });
+
+  // <-- AÑADIDO: volvemos a aplicar estilo al filtro activo
+  document.querySelectorAll('#filtro-todos, #filtro-pendiente, #filtro-leyendo, #filtro-leido')
+    .forEach(btn => btn.classList.remove('activo'));
+  const id = `filtro-${filtroActual}`;
+  const btnActivo = document.getElementById(id);
+  if (btnActivo) btnActivo.classList.add('activo');
+});
+    renderLibros();
+  </script>
+
+<div id="toast-guardado" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 hidden">
+  <div data-toast class="bg-marron-principal text-white px-6 py-3 rounded-xl shadow-lg text-center text-lg animate-fade focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-marron-hover">
+    Guardado correctamente
+  </div>
+</div>
+</body>
+</html>
+
+
+

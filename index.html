@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mi Biblioteca</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="main.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans text-gray-800">
+
+  <header class="bg-indigo-700 text-white text-center py-4 shadow">
+    <h1 class="text-2xl font-semibold">Mi Biblioteca</h1>
+  </header>
+
+  <!-- Filtros -->
+  <div class="flex justify-center gap-2 my-4">
+    <button onclick="filterBooks('leido')" class="bg-indigo-600 hover:bg-indigo-800 text-white px-4 py-2 rounded">
+      Leído
+    </button>
+    <button onclick="filterBooks('leyendo')" class="bg-indigo-600 hover:bg-indigo-800 text-white px-4 py-2 rounded">
+      En lectura
+    </button>
+    <button onclick="filterBooks('pendiente')" class="bg-indigo-600 hover:bg-indigo-800 text-white px-4 py-2 rounded">
+      Pendiente
+    </button>
+  </div>
+
+  <!-- Buscador -->
+  <div class="text-center my-4">
+    <input type="text" id="searchInput" oninput="searchBooks()"
+      class="w-4/5 max-w-md px-4 py-2 border border-gray-300 rounded shadow-sm"
+      placeholder="Buscar libros...">
+  </div>
+
+  <!-- Lista de libros -->
+  <section class="flex flex-wrap justify-center gap-4 px-4 pb-20" id="bookList">
+    <!-- Los libros se inyectan con JS -->
+  </section>
+
+  <!-- Botón flotante para añadir nuevo libro -->
+  <button onclick="addNewBook()"
+    class="fixed bottom-5 right-5 bg-indigo-700 text-white w-14 h-14 rounded-full text-3xl shadow-lg hover:bg-indigo-900">
+    +
+  </button>
+
+</body>
+</html>

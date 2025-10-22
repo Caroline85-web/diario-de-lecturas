@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" style="background:#f9f8f4;font-family:Nunito,Arial,sans-serif">
+  <defs>
+    <style>
+      .box{fill:#fff;stroke:#cabfb7;stroke-width:2}
+      .title{fill:#6b5f58;font-weight:700;font-size:20px}
+      .label{fill:#9f9187;font-size:13px}
+      .btn{fill:#9f9187}
+      .btnText{fill:#fff;font-weight:700;text-anchor:middle;dominant-baseline:middle}
+      .subtle{fill:#6b7280;font-size:12px}
+      .tag{fill:#ede7e3;stroke:#cabfb7;stroke-width:1}
+      .tagText{fill:#6b5f58;font-size:12px;text-anchor:middle;dominant-baseline:middle}
+    </style>
+  </defs>
+
+  <!-- MAIN / FORMULARIO (↑ altura para que quepa el botón dentro) -->
+  <rect x="24" y="112" width="1152" height="900" class="box" />
+  <text x="50" y="100" class="tagText">&lt;main&gt;</text>
+
+  <text x="56" y="168" class="title">Pantalla Formulario</text>
+  <!-- SECTION (↑ altura a 540 para contener el botón) -->
+  <rect x="48" y="178" width="1104" height="540" class="box" />
+  <text x="150" y="198" class="tagText">&lt;section id="pantalla-formulario"&gt;</text>
+
+  <!-- Botón volver -->
+  <text x="56" y="135" class="label">« Volver</text>
+
+  <!-- Preview imagen -->
+  <rect x="72" y="246" width="110" height="170" fill="#e5e7eb" stroke="#d1d5db"/><text x="90" y="335" class="subtle">Vista previa</text>
+  <text x="72" y="438" class="subtle">Imagen (input[file])</text>
+
+  <!-- ====== CAMPOS A LA DERECHA CON <label> ====== -->
+
+  <!-- TÍTULO -->
+  <rect x="204" y="220" width="60" height="18" class="tag" rx="6" ry="6"/><text x="234" y="230" class="tagText">&lt;label&gt;</text>
+  <rect x="204" y="246" width="928" height="50" class="box" rx="10" ry="10"/>
+  <text x="220" y="275" class="label">Título (input)</text>
+
+  <!-- AUTOR -->
+  <rect x="204" y="280" width="60" height="18" class="tag" rx="6" ry="6"/><text x="234" y="290" class="tagText">&lt;label&gt;</text>
+  <rect x="204" y="306" width="928" height="50" class="box" rx="10" ry="10"/>
+  <text x="220" y="335" class="label">Autor (input)</text>
+
+  <!-- ESTADO -->
+  <rect x="204" y="340" width="60" height="18" class="tag" rx="6" ry="6"/><text x="234" y="350" class="tagText">&lt;label&gt;</text>
+  <rect x="204" y="366" width="450" height="50" class="box" rx="10" ry="10"/>
+  <text x="220" y="395" class="label">Estado (select)</text>
+
+  <!-- GÉNERO -->
+  <rect x="682" y="340" width="60" height="18" class="tag" rx="6" ry="6"/><text x="712" y="350" class="tagText">&lt;label&gt;</text>
+  <rect x="682" y="366" width="450" height="50" class="box" rx="10" ry="10"/>
+  <text x="698" y="395" class="label">Género (select)</text>
+
+  <!-- NOTAS -->
+  
+  <rect x="72" y="426" width="1060" height="90" class="box" rx="10" ry="10"/>
+  <text x="88" y="454" class="label">Notas (textarea)</text>
+
+  <!-- CLASIFICACIÓN -->
+  <rect x="72" y="500" width="60" height="18" class="tag" rx="6" ry="6"/><text x="102" y="510" class="tagText">&lt;label&gt;</text>
+  <rect x="72" y="526" width="1060" height="46" class="box" rx="10" ry="10"/>
+  <text x="88" y="555" class="label">Clasificación</text>
+
+  <!-- FRASE QUE ME HA MARCADO -->
+  <rect x="72" y="582" width="1060" height="60" class="box" rx="10" ry="10"/>
+  <text x="88" y="612" class="label">Frase que me ha marcado (textarea)</text>
+
+  <!-- ====== GUARDAR (dentro de la sección; barra completa alineada con los campos) ====== -->
+  <rect x="72" y="652" width="1060" height="36" class="btn" rx="10" ry="10"/>
+  <text x="602" y="670" class="btnText">Guardar</text>
+</svg>
