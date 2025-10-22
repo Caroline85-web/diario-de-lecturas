@@ -1,4 +1,9 @@
-# 📖 Diario de Lecturas  
+##  📖 Diario de Lecturas  
+
+[![Made with HTML](https://img.shields.io/badge/HTML5-✔️-orange)]()
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-✔️-0ea5e9)]()
+[![JavaScript ES6](https://img.shields.io/badge/JavaScript-ES6-yellow)]()
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ![Preview](https://raw.githubusercontent.com/Caroline85-web/diario-de-lecturas/main/diagrama-diario-de-lecturas.svg)
 
@@ -60,7 +65,7 @@ asegurando un correcto contraste, jerarquía semántica y etiquetas adecuadas pa
 
 ⸻
 
-📸 Capturas de pantalla
+## 📸 Capturas de pantalla
 
 A continuación se muestran vistas del Diario de Lecturas en distintos dispositivos y resoluciones,
 para ilustrar su diseño responsive, limpio y accesible tanto en escritorio como en móvil.
@@ -75,15 +80,17 @@ para ilustrar su diseño responsive, limpio y accesible tanto en escritorio como
 <p align="center"><sub>💡 El diseño se adapta automáticamente a distintos tamaños de pantalla,  
 manteniendo la coherencia visual y la jerarquía de contenidos.</sub></p>
 
-📚 Información adicional
+## 📚 Información adicional
 
 Este proyecto forma parte del módulo Técnicas Avanzadas de Diseño Web, donde se aplican principios de:
-	•	Accesibilidad
-	•	Semántica HTML
-	•	Buenas prácticas en estructura y maquetación
+- Accesibilidad  
+- Semántica HTML  
+- Buenas prácticas en estructura y maquetación
 
-🧾 Créditos
+## 🧾 Créditos
 
 Desarrollado por Carolina Domínguez Bolaño
 📍 Madrid, España
-🔗 GitHub: Caroline85-web
+🔗 [GitHub: Caroline85-web](https://github.com/Caroline85-web)
+
+✨ Proyecto académico creado con pasión por el diseño y la accesibilidad.
