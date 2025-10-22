@@ -1,9 +1,11 @@
 ##  📖 Diario de Lecturas  
 
-[![Made with HTML](https://img.shields.io/badge/HTML5-✔️-orange)]()
-[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-✔️-0ea5e9)]()
-[![JavaScript ES6](https://img.shields.io/badge/JavaScript-ES6-yellow)]()
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+<p align="center">
+  <img src="https://img.shields.io/badge/HTML5-✔️-orange" />
+  <img src="https://img.shields.io/badge/TailwindCSS-✔️-0ea5e9" />
+  <img src="https://img.shields.io/badge/JavaScript-ES6-yellow" />
+  <img src="https://img.shields.io/badge/License-MIT-green.svg" />
+</p>
 
 ![Preview](https://raw.githubusercontent.com/Caroline85-web/diario-de-lecturas/main/diagrama-diario-de-lecturas.svg)
 
