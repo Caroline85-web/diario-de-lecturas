@@ -30,12 +30,18 @@ El proyecto ha sido creado como ejercicio práctico dentro del módulo de **Téc
 
 ## 🧩 Estructura del proyecto  
 
-📁 **diario-de-lecturas**  
-├── `index2.html` → Interfaz principal  
-├── `main.js` → Lógica de la aplicación  
-├── `script.css` → Estilos y personalización  
-├── `diagramas/` → Diagramas SVG y estructura semántica  
-└── `README.md` → Descripción del proyecto  
+📁 diario-de-lecturas
+│
+├── index2.html                  
+├── diagramas/
+│   ├── diagrama-home.svg
+│   └── diagrama-formulario.svg
+│
+├── versiones/
+│   ├── index-basico-homepage.html
+│   └── index-basico-formulario.html
+│
+└── README.md
 
 ---
 ## 🧑‍💻 Uso y prueba  
